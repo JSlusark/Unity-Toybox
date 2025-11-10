@@ -45,3 +45,31 @@ Assets/AssetStoreTools*
 # Serialized file types you usually don't need
 *.log
 *.stacktrace
+
+# Ignore downloded texture from unity asset store
+*/Assets/Cartoon_Texture_Pack
+
+# Additional Unity/Platform build outputs
+ExportedObj/
+.build/
+.gradle/
+[Tt]estResults/
+*.unitypackage
+
+# Unity addressables & cache (keep settings, ignore generated)
+[Aa]ssets/AddressableAssetsData/*/*.bin*
+[Aa]ssets/AddressableAssetsData/*/UnityBuiltInShaders*
+
+# Plastic SCM (if ever enabled)
+PlasticWorkspace/.plastic/
+
+# Rider / VS Code extra
+.idea/
+.vscode/
+*.DotSettings.user
+*.csproj.user
+
+# Crash + profiler extra
+*.crash
+*.mem
+*.heap
