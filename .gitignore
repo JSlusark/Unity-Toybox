@@ -1,0 +1,47 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Mm]emoryCaptures/
+[Ll]ogs/
+[Rr]ecordings/
+[Cc]rashReports/
+UserSettings/
+
+# OS / editor
+.DS_Store
+.vscode/
+.vs/
+.idea/
+
+# Visual Studio / Rider / Mono
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity generated asset meta and builds
+*.apk
+*.aab
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserdata/
+
+# Asset store tools (if present)
+Assets/AssetStoreTools*
+
+# Serialized file types you usually don't need
+*.log
+*.stacktrace
