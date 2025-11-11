@@ -73,3 +73,6 @@ PlasticWorkspace/.plastic/
 *.crash
 *.mem
 *.heap
+
+#Dotnet SDK tarballs
+dotnet-sdk-9.0.200-linux-x64.tar.gz
