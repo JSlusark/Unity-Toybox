@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class PlayerController : MonoBehaviour
 {
     private PlayerControls input;   // generated clas from inputSystem_actions from file
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10f;
     public float jumpForce = 7f;
     public int maxJumps = 1;
+    public GameObject EndScreen;
     // private int jumpCount = 0;
     private bool isGrounded = true;
 
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // Debug.Log("PlayerController is active!");
+        EndScreen.SetActive(false);
     }
 
     private void HandleMovement()
@@ -68,6 +71,7 @@ public class PlayerController : MonoBehaviour
         if (touchedLava)
         {
             Debug.Log("You are dead!");
+            EndScreen.SetActive(true);
             Destroy(gameObject);
             OnDisable();
         }
