@@ -6,18 +6,18 @@ TerrainLayer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NewLayer
+  m_Name: Plane_mountains
   m_DiffuseTexture: {fileID: 2800000, guid: c9c3e45ce574205bb9f8636260f4c2e1, type: 3}
   m_NormalMapTexture: {fileID: 0}
   m_MaskMapTexture: {fileID: 0}
-  m_TileSize: {x: 2.22, y: 4.07}
-  m_TileOffset: {x: 1.72, y: 0.91}
-  m_Specular: {r: 1, g: 1, b: 1, a: 0}
-  m_Metallic: 0.974
-  m_Smoothness: 0.627
+  m_TileSize: {x: 250, y: 250}
+  m_TileOffset: {x: 0, y: 0}
+  m_Specular: {r: 0, g: 0, b: 0, a: 0}
+  m_Metallic: 1
+  m_Smoothness: 0.662
   m_NormalScale: 1
   m_DiffuseRemapMin: {x: 0, y: 0, z: 0, w: 0}
-  m_DiffuseRemapMax: {x: 0.54527426, y: 0.5716916, z: 0.6715808, w: 1}
+  m_DiffuseRemapMax: {x: 1, y: 1, z: 1, w: 1}
   m_MaskMapRemapMin: {x: 0, y: 0, z: 0, w: 0}
   m_MaskMapRemapMax: {x: 1, y: 1, z: 1, w: 1}
   m_SmoothnessSource: 1
