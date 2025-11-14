@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 
 public class PlayerController : MonoBehaviour
@@ -10,7 +11,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 10f;
     public float jumpForce = 7f;
     public int maxJumps = 1;
+    public float bounceDuration = 1f;
     public GameObject EndScreen;
+    private AudioSource audioSource;
+    private float bounceTimes = 0;
     // private int jumpCount = 0;
     private bool isGrounded = true;
 
@@ -28,6 +32,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // Debug.Log("PlayerController is active!");
+        audioSource = GetComponent<AudioSource>(); // moght be useful in awake?
         EndScreen.SetActive(false);
     }
 
@@ -44,6 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         if (input.Player.Jump.triggered && isGrounded)
         {
+            bounceTimes = 1;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
             Debug.Log("Player is jumping:" + isGrounded);
@@ -65,6 +71,8 @@ public class PlayerController : MonoBehaviour
         if (touchedGround)
         {
             Debug.Log("Player touched ground");
+            // if (bounceTimes > 0)
+                audioSource.Play();
             isGrounded = true;
         }
 
