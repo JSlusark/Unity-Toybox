@@ -1,21 +1,23 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem; // The new Input System package
 using System.Collections;
+using System.Numerics;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
+using System;
 
 
 public class PlayerController : MonoBehaviour
 {
     private PlayerControls input;   // generated clas from inputSystem_actions from file
-    private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private float inputSpeed;
+    [SerializeField] private float jumpForce;
 
-    public float moveSpeed = 10f;
-    public float jumpForce = 7f;
-    public int maxJumps = 1;
-    public float bounceDuration = 1f;
-    public GameObject EndScreen;
+    [SerializeField] private GameObject EndScreen;
+
+    private InputAction moveAction;
     private AudioSource audioSource;
-    private float bounceTimes = 0;
-    // private int jumpCount = 0;
     private bool isGrounded = true;
 
 
@@ -24,43 +26,43 @@ public class PlayerController : MonoBehaviour
     void Awake() // created once when the object is initialized
     {
         input = new PlayerControls();    // create instance of the generated class
-        rb = GetComponent<Rigidbody>();
+        moveAction = input.Player.Move;
     }
 
-    void OnEnable() => input.Player.Enable(); // enable the action map when object is active
-    void OnDisable() => input.Player.Disable(); // disable the action map when object is destroyed
+    private Vector2 inputDirection;
+    void OnEnable() => input.Player.Enable();
+    void OnDisable() => input.Player.Disable();
     void Start()
     {
-        // Debug.Log("PlayerController is active!");
         audioSource = GetComponent<AudioSource>(); // moght be useful in awake?
-        EndScreen.SetActive(false);
+    }
+    void Update() // called at frame therefore expensive to handle 
+    {
+        inputDirection = moveAction.ReadValue<Vector2>(); // reads x and y input from bi-dimensional controller
+        HandleJump();
+    }
+
+    void FixedUpdate() // using FixedUpdate uses fixes intervals which is better to handle costly calculations that are heavy on the CPU (like physics calculations)
+    {
+        HandleMovement();
     }
 
     private void HandleMovement()
     {
-        Vector2 key = input.Player.Move.ReadValue<Vector2>(); // reads value as 2dvector
-        float z = 0f;
-        Vector3 movement = new Vector3(key.x, z, key.y) * moveSpeed;
-        rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
-
-
+        Vector3 movement = new Vector3(inputDirection.x, 0f, inputDirection.y) * inputSpeed; // vec3 is x y z but vec2 is x y, in a 3d space our z axis is the "vertical 2d" direction
+        rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z); // applies speed to each considered axis (y is kept at its current value since jumping axis)
     }
-    private void HandleJump()
+    private void HandleJump() // jump i sthe y axis
     {
         if (input.Player.Jump.triggered && isGrounded)
         {
-            bounceTimes = 1;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
             Debug.Log("Player is jumping:" + isGrounded);
         }
+        // add landing physics
     }
 
-    void Update() // at every rendered frame
-    {
-        HandleMovement();
-        HandleJump();
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -70,18 +72,20 @@ public class PlayerController : MonoBehaviour
         Debug.Log("PlayerController on collision is active!");
         if (touchedGround)
         {
-            Debug.Log("Player touched ground");
-            // if (bounceTimes > 0)
-                audioSource.Play();
+            audioSource.Play(); // bounce sound
             isGrounded = true;
         }
 
         if (touchedLava)
         {
-            Debug.Log("You are dead!");
             EndScreen.SetActive(true);
-            Destroy(gameObject);
-            OnDisable();
+            this.gameObject.SetActive(false);
         }
+    }
+
+
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }
