@@ -1,32 +1,33 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // The new Input System package
-using System.Collections;
-using System.Numerics;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
-using System;
+using UnityEngine.InputSystem; 
 
 
 public class PlayerController : MonoBehaviour
 {
-    private PlayerControls input;   // generated clas from inputSystem_actions from file
+
+
+    // [Header("Input System")]
+    private PlayerControls input;
+
+    // References to ease access to spec actions
+    private InputAction moveAction;
+    private InputAction jumpAction;
+    
+    [Header("Physics")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float inputSpeed;
     [SerializeField] private float jumpForce;
-
-    [SerializeField] private GameObject EndScreen;
-
-    private InputAction moveAction;
-    private AudioSource audioSource;
     private bool isGrounded = true;
 
+    [Header ("Other")] // to be moved to their own manager when prototyping is extended
+    [SerializeField] private GameObject EndScreen; // with retry button to restart 
+    private AudioSource audioSource; // the ball jump/land sound 
 
-
-    // Start instead is called before the first frame update and only if object is active
-    void Awake() // created once when the object is initialized
+    void Awake()
     {
-        input = new PlayerControls();    // create instance of the generated class
+        input = new PlayerControls();
         moveAction = input.Player.Move;
+        jumpAction = input.Player.Jump;
     }
 
     private Vector2 inputDirection;
@@ -34,25 +35,25 @@ public class PlayerController : MonoBehaviour
     void OnDisable() => input.Player.Disable();
     void Start()
     {
-        audioSource = GetComponent<AudioSource>(); // moght be useful in awake?
+        audioSource = GetComponent<AudioSource>(); // 
     }
-    void Update() // called at frame therefore expensive to handle 
+    void Update()
     {
-        inputDirection = moveAction.ReadValue<Vector2>(); // reads x and y input from bi-dimensional controller
+        inputDirection = moveAction.ReadValue<Vector2>();
         HandleJump();
     }
 
-    void FixedUpdate() // using FixedUpdate uses fixes intervals which is better to handle costly calculations that are heavy on the CPU (like physics calculations)
+    void FixedUpdate() // good to handle logic that can be heavy on the CPU (like physics calculations)
     {
         HandleMovement();
     }
 
     private void HandleMovement()
     {
-        Vector3 movement = new Vector3(inputDirection.x, 0f, inputDirection.y) * inputSpeed; // vec3 is x y z but vec2 is x y, in a 3d space our z axis is the "vertical 2d" direction
-        rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z); // applies speed to each considered axis (y is kept at its current value since jumping axis)
+        Vector3 movement = new Vector3(inputDirection.x, 0f, inputDirection.y) * inputSpeed; //conversion (vec 3 z is equivalent to vec2 y)
+        rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z); // y kept at its current value since not applies
     }
-    private void HandleJump() // jump i sthe y axis
+    private void HandleJump()
     {
         if (input.Player.Jump.triggered && isGrounded)
         {
@@ -60,7 +61,6 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
             Debug.Log("Player is jumping:" + isGrounded);
         }
-        // add landing physics
     }
 
 
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("PlayerController on collision is active!");
         if (touchedGround)
         {
-            audioSource.Play(); // bounce sound
+            audioSource.Play(); 
             isGrounded = true;
         }
 
